@@ -13,9 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
+from django.conf.urls import include, url
+from django.views.generic import RedirectView
+from rest_framework.routers import DefaultRouter
+from api import views
+
+router = DefaultRouter()
+router.register(r'todos', views.TodoViewSet)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    url(r'^api/', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url('', RedirectView.as_view(url='/static/index.html')),
 ]
